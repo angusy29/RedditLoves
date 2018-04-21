@@ -11,7 +11,7 @@ python3 redditr.py pics top 10
 
 ## Results
 <p align="center">
-	<img src="Screenshots/example1.png" width="30%"/>
+	<img src="Screenshots/example1.png" width="80%"/>
 </p>
 
 ## Data
