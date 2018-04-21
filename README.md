@@ -18,11 +18,12 @@ I preprocessed through the two data sources to ensure the country names could be
 
 Also added in an extra_countries.json for countries such as Scotland, Wales, because these are mentioned often on Reddit.
 
-Korea is added, to amalgamate results from both North and South, as well as get around post titles which use abbreviations such as N.Korea or S.Korea.
+Korea is added, to amalgamate results from both North and South, as well as to include post titles which use abbreviations such as N.Korea or S.Korea.
 
 Great Britain, Britain, England all seemed to be interchangeable, so I added in Britain and England to extra_countries.json and amalgamated all the results together for the final result.
 
 ## How this works
+* Looks through 1000 posts in the specified subreddit and section
 * Cities are populated under the country key in the dictionary
 * Loops through each country and checks if the country, alpha codes or nationality is mentioned in the title.
 * Then loops through each city or province in the country to check if the city/province was mentioned in the title.
@@ -40,3 +41,5 @@ post would be about USA.
 * Provinces such as "Central" in Ghana may be detected when the post title is completely irrelevant, such as "Central Park, NYC"
 * On the topic of NYC, city abbreviations are not checked, because I felt it was slightly overkill for what I just wanted to achieve, I solely wanted rough estimates of which countries Reddit mentioned the most.
 * Ivory Coast has a city named Man which produced false positives for posts such as "Man comes back from war"
+
+
