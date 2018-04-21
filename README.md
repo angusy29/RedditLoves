@@ -30,7 +30,7 @@ Great Britain, Britain, England all seemed to be interchangeable, so I added in 
 ## How this works
 * Looks through 1000 posts in the specified subreddit and section
 * Cities are populated under the country key in the dictionary
-* Loops through each country and checks if the country, alpha codes or nationality is mentioned in the title.
+* Loops through each country and checks if the country, nationality is mentioned in the title.
 * Then loops through each city or province in the country to check if the city/province was mentioned in the title.
 * If a match is found for any of the above, we increment the number of mentions of a country by 1.
 

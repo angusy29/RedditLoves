@@ -73,9 +73,10 @@ def check_mentions(title):
 	# check if country or code is in title
 	for key in list_of_countries:
 		pattern = patterns[key]
+#		if re.search(pattern, title) \
+#			or ('alpha_3_code' in list_of_countries[key] and re.search(patterns[list_of_countries[key]['alpha_3_code']], title)) \
+#			or ('alpha_2_code' in list_of_countries[key] and re.search(patterns[list_of_countries[key]['alpha_2_code']], title)) \
 		if re.search(pattern, title) \
-			or ('alpha_3_code' in list_of_countries[key] and re.search(patterns[list_of_countries[key]['alpha_3_code']], title)) \
-			or ('alpha_2_code' in list_of_countries[key] and re.search(patterns[list_of_countries[key]['alpha_2_code']], title)) \
 			or list_of_countries[key]['nationality'] in title:
 				print("Found: " + key)
 				country_to_count[key] += 1
