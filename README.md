@@ -4,7 +4,7 @@ Wanted to figure out which country people posted the most about in a specific su
 Because I swear there are large number of upvoted Reddit posts with the country "Japan" in the title.
 
 ## How to use
-python3 redditr.py <subreddit> <top/controversial/hot/new> <numberOfResults>
+python3 redditr.py [subreddit] [top/controversial/hot/new] [number of results to display]
 
 ### Example
 python3 redditr.py pics top 10
