@@ -22,10 +22,13 @@ def construct_country_objects():
 	for row in data:
 		row.pop('num_code', None)
 		row['cities'] = {}
-		row['province'] = set()
+		row['province'] = {}
 		list_of_countries[row['en_short_name']] = row
 		country_to_count[row['en_short_name']] = 0
 		patterns[row['en_short_name']] = re.compile("(^|\s)" + row['en_short_name'] + "(\s|$)")
+		patterns[row['alpha_2_code']] = re.compile("(^|\s)" + row['alpha_2_code'] + "(\s|$)")
+		patterns[row['alpha_3_code']] = re.compile("(^|\s)" + row['alpha_3_code'] + "(\s|$)")
+		
 	
 	f = open('extra_countries.json')
 	data = json.loads(f.read())
@@ -33,11 +36,11 @@ def construct_country_objects():
 
 	for row in data:
 		row['cities'] = {}
-		row['province'] = set()
+		row['province'] = {}
 		list_of_countries[row['en_short_name']] = row
 		country_to_count[row['en_short_name']] = 0
 		patterns[row['en_short_name']] = re.compile("(^|\s)" + row['en_short_name'] + "(\s|$)")
-
+		
 def populate_cities():
 	f = open('cities.csv')
 	reader = csv.reader(f, delimiter=',')
@@ -53,8 +56,12 @@ def populate_cities():
 		# 7 = iso3
 		# 8 = province	
 		if row[5] in list_of_countries:
-			list_of_countries[row[5]]['province'].add(row[8])
-			list_of_countries[row[5]]['cities'][row[1]] = row[4]
+			list_of_countries[row[5]]['cities'][row[1]] = int(float(row[4]))
+			
+			if row[8] not in list_of_countries[row[5]]['province']:
+				list_of_countries[row[5]]['province'][row[8]] = int(float(row[4]))
+			else:
+				list_of_countries[row[5]]['province'][row[8]] += int(float(row[4]))
 			patterns[row[1]] = re.compile("(^|\s)" + row[1] + "(\s|$)")
 			patterns[row[8]] = re.compile("(^|\s)" + row[8] + "(\s|$)")
 		else:
@@ -67,8 +74,8 @@ def check_mentions(title):
 	for key in list_of_countries:
 		pattern = patterns[key]
 		if re.search(pattern, title) \
-			or ('alpha_3_code' in list_of_countries[key] and list_of_countries[key]['alpha_3_code'] in title) \
-			or ('alpha_2_code' in list_of_countries[key] and list_of_countries[key]['alpha_2_code'] in title) \
+			or ('alpha_3_code' in list_of_countries[key] and re.search(patterns[list_of_countries[key]['alpha_3_code']], title)) \
+			or ('alpha_2_code' in list_of_countries[key] and re.search(patterns[list_of_countries[key]['alpha_2_code']], title)) \
 			or list_of_countries[key]['nationality'] in title:
 				print("Found: " + key)
 				country_to_count[key] += 1
@@ -82,11 +89,13 @@ def check_mentions(title):
 	city_name_length = 0
 	city_population = 0
 	province_name_length = 0
+	province_population = 0
+
 	for key in list_of_countries:
 		for city in list_of_countries[key]['cities']:
 			pattern = patterns[city]
 			if re.search(pattern, title):
-				if len(city) > city_name_length or list_of_countries[key]['cities'][city] > city_population:
+				if list_of_countries[key]['cities'][city] > city_population:
 					country_city = key
 					city_name = city
 					city_name_length = len(city)
@@ -95,15 +104,16 @@ def check_mentions(title):
 		for province in list_of_countries[key]['province']:
 			pattern = patterns[province]
 			if re.search(pattern, title):
-				if len(province) > province_name_length:
+				if list_of_countries[key]['province'][province] > province_population:
 					country_province = key
 					province_name = province
 					province_name_length = len(province)
+					province_population = list_of_countries[key]['province'][province]
 
-	if city_name_length >= province_name_length and country_city in list_of_countries:
+	if len(city_name) > 0 and city_name_length >= province_name_length and country_city in list_of_countries:
 		country_to_count[country_city] += 1
 		print("Found: " + country_city + "		City:" + city_name)
-	elif country_province in list_of_countries:
+	elif len(province_name) > 0 and country_province in list_of_countries:
 		country_to_count[country_province] += 1
 		print("Found: " + country_province + "		Province: " + province_name)
 
