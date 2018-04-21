@@ -9,6 +9,11 @@ python3 redditr.py [subreddit] [top/controversial/hot/new] [number of results to
 ### Example
 python3 redditr.py pics top 10
 
+## Results
+<p align="center">
+	<img src="Screenshots/example1.png" width="30%"/>
+</p>
+
 ## Data
 List of countries/nationalities/alpha codes acquired from https://github.com/Dinu/country-nationality-list/blob/master/countries.json
 
